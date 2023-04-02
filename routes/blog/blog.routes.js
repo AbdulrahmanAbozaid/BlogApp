@@ -11,14 +11,10 @@ const endPoints = require("../../helpers/endPoints");
 // Methods
 
 // get
-app.get(
-  "/",
-  [verifyToken, checkSession, checkRole(endPoints.GET_ALL_BLOGS)],
-  controller.getAllBlogs
-);
+app.get("/", verifyToken(endPoints.GET_ALL_BLOGS), controller.getAllBlogs);
 app.get(
   "/getAllBlogs",
-  [verifyToken, checkSession, checkRole(endPoints.GET_ALL_BLOGS)],
+  verifyToken(endPoints.GET_ALL_BLOGS),
   controller.getAllBlogs
 );
 app.get("/getBlogById/:id", controller.getBlogById);
@@ -29,13 +25,13 @@ app.get("/getUserBlogs/:id", controller.getUserBlogs);
 // post
 app.post(
   "/addBlog/:userId",
-  [verifyToken, checkSession, checkRole(endPoints.ADD_BLOG), checkBlogsLimit],
+  [verifyToken(endPoints.ADD_BLOG), checkBlogsLimit],
   controller.addBlog
 );
 app.put("/updateBlog/:id", controller.updateBlog);
 app.delete(
   "/deleteBlog/:userId/:blogId",
-  [verifyToken, checkSession, checkRole(endPoints.DELETE_BLOG)],
+  verifyToken(endPoints.DELETE_BLOG),
   controller.deleteBlog
 );
 

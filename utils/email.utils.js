@@ -1,17 +1,15 @@
 const nodemailer = require("nodemailer");
+const Logger = require("../services/logger.services");
+const userLogger = new Logger("user", "email.utils");
 
 // async..await is not allowed in global scope, must use a wrapper
 exports.sendMail = async (receiver, subject, text, html) => {
   // create reusable transporter object using the default SMTP transport
 
-  nodemailer.createTestAccount((err, account) => {
-    if (err) {
-      console.error("Failed to create a testing account. " + err.message);
-      return process.exit(1);
-    }
+  try {
+    let account = await nodemailer.createTestAccount();
 
-    let transporter = nodemailer.createTransport({
-      // service: "gmail",
+    let transporter = await nodemailer.createTransport({
       host: account.smtp.host,
       port: account.smtp.port,
       secure: account.smtp.secure,
@@ -20,6 +18,7 @@ exports.sendMail = async (receiver, subject, text, html) => {
         pass: account.pass,
       },
     });
+
     let msg = {
       from: '"Node Mailer" <xjihxre694@tormails.com>',
       to: receiver,
@@ -27,13 +26,17 @@ exports.sendMail = async (receiver, subject, text, html) => {
       text,
       html,
     };
-    transporter.sendMail(msg, (err, info) => {
-      if (err) {
-        console.log("Error occurred. " + err.message);
-        return process.exit(1);
-      }
-      console.log("Message sent: %s", info.messageId);
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    });
-  });
+    let info = await transporter.sendMail(msg);
+    userLogger.info(
+      `Message sent: ${
+        info.messageId
+      },Preview URL: ${nodemailer.getTestMessageUrl(info)}`
+    );
+
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  } catch (error) {
+    userLogger.error(error.message);
+    console.log(error.message);
+  }
 };

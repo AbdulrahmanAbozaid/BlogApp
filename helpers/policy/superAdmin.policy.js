@@ -6,6 +6,7 @@ module.exports = [
   endPoints.DELETE_BLOG,
   endPoints.UPDATE_USER,
   endPoints.DELETE_USER,
+  endPoints.GET_USER_BY_ID,
 ];
 
 /*

@@ -47,12 +47,12 @@ exports.create = async (form) => {
 
 exports.update = async (id, form) => {
   await User.findByIdAndUpdate(id, form);
-  let user = await this.isExist({ id });
+  let user = await this.isExist({ _id: id });
   if (user.success) {
     return {
       code: 200,
       success: true,
-      record: user,
+      record: user.record,
     };
   } else {
     return {
