@@ -4,7 +4,7 @@ const fs = require("fs");
 exports.uploadImage = async (req, res) => {
   try {
     let { _id } = req.params;
-    let images = req.files;
+    let image = req.file;
     let user = await userRepo.isExist({ _id });
 
     if (!user.error) {
@@ -13,7 +13,7 @@ exports.uploadImage = async (req, res) => {
         fs.unlinkSync(oldImage.path);
       }
 
-      const upload = await userRepo.update(_id, { image: images[0] });
+      const upload = await userRepo.update(_id, { image });
       res.status(upload.code).json(upload);
     } else {
       res.status(user.code).json({ error: user.error });
