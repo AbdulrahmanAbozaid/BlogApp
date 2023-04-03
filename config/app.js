@@ -2,6 +2,8 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 
 // Methods
 const connection = require("./db.connection");
@@ -19,5 +21,6 @@ app.use(sessionAuth);
 app.use(cors());
 app.use(handleCorsPolicy);
 app.use(Routes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 module.exports = app;

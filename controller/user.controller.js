@@ -15,7 +15,6 @@ const getCurrentDate = () => new Date(Date.now()).toUTCString();
 let getAllUsers = async (req, res) => {
   let date = getCurrentDate();
   try {
-    throw new Error("Invalid date");
     let users = await userRepo.list();
     userLogger.info("get all users", users.records);
     prepareAuditEvent(

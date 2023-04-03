@@ -23,6 +23,7 @@ let userSchema = mongoose.Schema({
     enum: ["superAdmin", "admin", "user", "premiumUser"],
     default: "user",
   },
+  image: { type: Object, required: false },
 });
 
 userSchema.pre("save", async function (next) {
