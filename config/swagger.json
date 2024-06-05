@@ -1,194 +1,305 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "1.0.0",
-        "title": "User And Blogs API",
-        "description": "User Creates Blogs",
-        "licence": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        }
-    },
-    "host": "localhost:8081",
-    "basePath": "/",
-    "tags": [
-        {
-            "name": "User and Blogs",
-            "description": "API"
-        }
-    ],
-    "schemes": [
-        "http"
-    ],
-    "consumes": [
-        "application/json"
-    ],
-    "produced": [
-        "application/json"
-    ],
-    "paths": {
-        "/blogs/getAllBlogs": {
-            "get": {
-                "description": "Return List of Blogs",
-                "produces": "application/json",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/blog"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/bolgs//addBlog/{userId}": {
-            "post": {
-                "description": "add new blog",
-                "produces": "application/json",
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "path",
-                        "description": "user id",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "sdg45dsdf45sd"
-                        }
-                    },
-                    {
-                        "name": "blog",
-                        "in": "body",
-                        "description": "blog instance",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "title": {
-                                    "type": "string",
-                                    "example": "blog title"
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "example": "blog description"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/bolgs/updateBlog/{id}": {
-            "put": {
-                "description": "Update blog",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Blog Id",
-                        "required": true,
-                        "type": "string",
-                        "example": "af54sa5f45asf"
-                    },
-                    {
-                        "name": "blog",
-                        "in": "body",
-                        "description": "edit blog",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "title": {
-                                    "type": "string",
-                                    "required": false,
-                                    "example": "blog title"
-                                },
-                                "description": {
-                                    "type": "string",
-                                    "required": false,
-                                    "example": "blog description"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Update blog",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/bolgs/deleteBlog/{userId}/{blogId}": {
-            "delete": {
-                "description": "Delete blog",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "path",
-                        "description": "User Id",
-                        "required": true,
-                        "type": "string",
-                        "example": "af54sa5f45asf"
-                    },
-                    {
-                        "name": "blogId",
-                        "in": "path",
-                        "description": "Blog Id",
-                        "required": true,
-                        "type": "string",
-                        "example": "af54sa5f45asf"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "blog": {
-            "type": "object",
-            "required": [
-                "title",
-                "description"
-            ],
-            "properties": {
-                "title": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "_id": {
-                    "type": "string"
-                }
-            }
-        }
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API documentation for the BlogApp.",
+    "version": "1.0.0",
+    "title": "BlogApp API",
+    "contact": {
+      "email": "abdulrahman.ab.mahmoud@gmail.com"
     }
+  },
+  "host": "localhost:8081",
+  "basePath": "/api",
+  "tags": [
+    { "name": "Users", "description": "Operations related to users" },
+    { "name": "Blogs", "description": "Operations related to blogs" },
+    { "name": "Uploads", "description": "Operations related to file uploads" }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Register a new user",
+        "description": "This endpoint registers a new user.",
+        "operationId": "registerUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "User created successfully" },
+          "400": { "description": "Invalid input" }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Login a user",
+        "description": "This endpoint logs in a user.",
+        "operationId": "loginUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Login successful" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/users/profile": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user profile",
+        "description": "This endpoint retrieves the profile of the logged-in user.",
+        "operationId": "getUserProfile",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/UserProfile"
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/blogs": {
+      "post": {
+        "tags": ["Blogs"],
+        "summary": "Create a new blog",
+        "description": "This endpoint creates a new blog post.",
+        "operationId": "createBlog",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Blog object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Blog"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": { "description": "Blog created successfully" },
+          "400": { "description": "Invalid input" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "get": {
+        "tags": ["Blogs"],
+        "summary": "Get all blogs",
+        "description": "This endpoint retrieves all blog posts.",
+        "operationId": "getAllBlogs",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Blogs retrieved successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Blog"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blogs/{id}": {
+      "get": {
+        "tags": ["Blogs"],
+        "summary": "Get a single blog",
+        "description": "This endpoint retrieves a single blog post by its ID.",
+        "operationId": "getBlogById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Blog ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Blog"
+            }
+          },
+          "404": { "description": "Blog not found" }
+        }
+      },
+      "put": {
+        "tags": ["Blogs"],
+        "summary": "Update a blog",
+        "description": "This endpoint updates a blog post by its ID.",
+        "operationId": "updateBlog",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Blog ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Blog object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Blog"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Blog updated successfully" },
+          "400": { "description": "Invalid input" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Blog not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Blogs"],
+        "summary": "Delete a blog",
+        "description": "This endpoint deletes a blog post by its ID.",
+        "operationId": "deleteBlog",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Blog ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Blog deleted successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Blog not found" }
+        }
+      }
+    },
+    "/uploads": {
+      "post": {
+        "tags": ["Uploads"],
+        "summary": "Upload a file",
+        "description": "This endpoint uploads a file.",
+        "operationId": "uploadFile",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "file",
+            "description": "File to upload",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "File uploaded successfully" },
+          "400": { "description": "Invalid input" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "password": { "type": "string" }
+      },
+      "required": ["username", "password"]
+    },
+    "UserProfile": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "Blog": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "author": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "content"]
+    }
+  }
 }

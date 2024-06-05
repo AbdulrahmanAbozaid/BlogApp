@@ -6,7 +6,8 @@ exports.uploadImage = (folderName) => {
       cb(null, `uploads/${folderName}`);
     },
     filename: (req, file, cb) => {
-      cb(null, Date.now() + Math.random() + ".jpg");
+      const uniqueSuffix = Date.now() + "-" + Math.trunc(Math.random() * 1e5);
+      cb(null, file.fieldname + "-" + uniqueSuffix);
     },
   });
 
